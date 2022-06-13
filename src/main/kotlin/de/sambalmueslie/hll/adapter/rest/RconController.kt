@@ -122,7 +122,7 @@ class RconController(private val service: RconService) {
 
     // profanity
     fun profanityWordsAdd(auth: Authentication, words: List<String>) = service.profanityWordsAdd(auth, words)
-    fun profanityWordsRemove(auth: Authentication, words: List<String>) = service.profanityWordsRemove(auth, words)
+    fun profanityWordsRemove(auth: Authentication, word: String) = service.profanityWordsRemove(auth, word)
 
     // vote kick
     fun setVoteKick(auth: Authentication, enabled: Boolean) = service.setVoteKick(auth, enabled)

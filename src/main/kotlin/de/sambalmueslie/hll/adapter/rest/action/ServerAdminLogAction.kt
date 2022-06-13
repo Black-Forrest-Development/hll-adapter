@@ -11,10 +11,12 @@ class ServerAdminLogAction(private val client: HllRconClient) : BaseAction() {
     companion object {
         val logger: Logger = LoggerFactory.getLogger(ServerAdminLogAction::class.java)
     }
-	override fun getId() = "ServerAdminLog"
+
+    override fun getId() = "ServerAdminLog"
 
     fun get(auth: Authentication, minutes: Int, filter: String): List<String> {
-        TODO("Not yet implemented")
+        check(auth)
+        return client.getList("showlog $minutes $filter")
     }
 
 }

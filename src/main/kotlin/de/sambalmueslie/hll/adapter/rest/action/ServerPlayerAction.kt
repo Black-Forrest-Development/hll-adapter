@@ -11,12 +11,12 @@ class ServerPlayerAction(private val client: HllRconClient) : BaseAction() {
     companion object {
         private val logger: Logger = LoggerFactory.getLogger(ServerPlayerAction::class.java)
     }
+
     override fun getId() = "ServerPlayer"
 
     fun get(auth: Authentication): Set<String> {
         check(auth)
-//        return client.sendCommand("get players")
-        TODO("Not yet implemented")
+        return client.getSet("get players")
     }
 
 }

@@ -17,21 +17,21 @@ class ManageAdminAction(private val client: HllRconClient) : BaseAction() {
 
     fun get(auth: Authentication): Set<String> {
         check(auth)
-        TODO("Not yet implemented")
+        return client.getSet("get adminids")
     }
 
     fun add(auth: Authentication, steamId: String, group: String, comment: String): Any {
         check(auth)
-        TODO("Not yet implemented")
+        return client.sendCommand("adminadd $steamId $group $comment")
     }
 
     fun remove(auth: Authentication, steamId: String): Any {
         check(auth)
-        TODO("Not yet implemented")
+        return client.sendCommand("admindel $steamId")
     }
 
     fun getGroups(auth: Authentication): Set<String> {
         check(auth)
-        TODO("Not yet implemented")
+        return client.getSet("get admingroups")
     }
 }

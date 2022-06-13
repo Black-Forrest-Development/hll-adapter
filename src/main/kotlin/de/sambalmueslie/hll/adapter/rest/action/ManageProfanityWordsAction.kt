@@ -11,18 +11,22 @@ class ManageProfanityWordsAction(private val client: HllRconClient) : BaseAction
     companion object {
         private val logger: Logger = LoggerFactory.getLogger(ManageProfanityWordsAction::class.java)
     }
+
     override fun getId() = "ManageProfanityWords"
 
     fun get(auth: Authentication): Set<String> {
-        TODO("Not yet implemented")
+        check(auth)
+        return client.getSet("get profanity")
     }
 
     fun add(auth: Authentication, words: List<String>): Any {
-        TODO("Not yet implemented")
+        check(auth)
+        return client.setList("banprofanity", words)
     }
 
-    fun remove(auth: Authentication, words: List<String>): Any {
-        TODO("Not yet implemented")
+    fun remove(auth: Authentication, word: String): Any {
+        check(auth)
+        return client.sendCommand("unbanprofanity $word")
     }
 
 }

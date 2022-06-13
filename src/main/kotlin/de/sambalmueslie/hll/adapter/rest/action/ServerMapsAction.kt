@@ -16,7 +16,7 @@ class ServerMapsAction(private val client: HllRconClient) : BaseAction() {
 
     fun get(auth: Authentication): Set<String> {
         check(auth)
-        TODO("Not yet implemented")
+        return client.getSet("get mapsforrotation")
     }
 
 }

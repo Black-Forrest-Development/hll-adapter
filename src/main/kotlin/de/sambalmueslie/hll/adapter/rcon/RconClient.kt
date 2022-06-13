@@ -11,7 +11,6 @@ import io.netty.channel.socket.nio.NioSocketChannel
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import java.util.concurrent.CompletableFuture
-import java.util.concurrent.Future
 import java.util.concurrent.atomic.AtomicBoolean
 
 
@@ -34,17 +33,17 @@ class RconClient(val config: RconClientConfig) : HllRconClient {
         .option(ChannelOption.SO_KEEPALIVE, true)
         .handler(RconClientInitializer(this))
 
-   override fun connect() {
+    override fun connect() {
         connectionFuture = CompletableFuture<Boolean>()
         channel = bootstrap.connect(config.host, config.port).sync().channel()
         connectionFuture.get()
     }
 
-    override   fun disconnect() {
+    override fun disconnect() {
         channel.disconnect().sync()
     }
 
-    override  fun sendCommand(command: String): String {
+    override fun sendCommand(command: String): String {
         if (!isLoggedIn()) return ""
         commandFuture = CompletableFuture<String>()
         logger.trace("Send command: [$command]")
@@ -72,6 +71,34 @@ class RconClient(val config: RconClientConfig) : HllRconClient {
         connectionFuture.complete(false)
 
         connect()
+    }
+
+    override fun getBoolean(command: String): Boolean {
+        return sendCommand(command) == "on"
+    }
+
+    override fun setBoolean(command: String, value: Boolean): String {
+        return sendCommand("$command ${if (value) "on" else "off"}")
+    }
+
+    override fun getInt(command: String): Int {
+        return sendCommand(command).toIntOrNull() ?: -1
+    }
+
+    override fun getList(command: String): List<String> {
+        return sendCommand(command).split("\n")
+    }
+
+    override fun getSet(command: String): Set<String> {
+        return sendCommand(command).split("\n").toSet()
+    }
+
+    override fun setInt(command: String, value: Int): String {
+        return sendCommand("$command $value")
+    }
+
+    override fun setList(command: String, words: List<String>): String {
+        return sendCommand("$command ${words.joinToString(",")}")
     }
 
 

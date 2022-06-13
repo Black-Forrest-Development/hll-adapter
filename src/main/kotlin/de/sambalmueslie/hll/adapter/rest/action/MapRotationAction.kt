@@ -12,11 +12,11 @@ class MapRotationAction(private val client: HllRconClient) : BaseAction() {
         private val logger: Logger = LoggerFactory.getLogger(MapRotationAction::class.java)
     }
 
-    override fun getId() = "ManageAdmin"
+    override fun getId() = "MapRotation"
 
     fun get(auth: Authentication): Set<String> {
         check(auth)
-        TODO("Not yet implemented")
+        return client.getSet("rotlist")
     }
 
     fun add(auth: Authentication, name: String): Any {

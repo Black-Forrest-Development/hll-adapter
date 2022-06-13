@@ -12,7 +12,7 @@ import org.slf4j.LoggerFactory
 
 @Singleton
 class RconService(
-    private val config: RconClientConfig
+    config: RconClientConfig
 ) {
     companion object {
         private val logger: Logger = LoggerFactory.getLogger(RconService::class.java)
@@ -20,6 +20,9 @@ class RconService(
 
     private val client = RconClient(config)
 
+    init {
+        client.connect()
+    }
 
     private val serverAdminLogAction = ServerAdminLogAction(client)
     fun getAdminLog(auth: Authentication, minutes: Int, filter: String): List<String> {
@@ -263,8 +266,8 @@ class RconService(
         return profanityWordsAction.add(auth, words)
     }
 
-    fun profanityWordsRemove(auth: Authentication, words: List<String>): Any {
-        return profanityWordsAction.remove(auth, words)
+    fun profanityWordsRemove(auth: Authentication, word: String): Any {
+        return profanityWordsAction.remove(auth, word)
     }
 
 

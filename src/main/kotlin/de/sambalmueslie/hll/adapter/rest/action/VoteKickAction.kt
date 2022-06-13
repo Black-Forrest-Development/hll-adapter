@@ -15,22 +15,22 @@ class VoteKickAction(private val client: HllRconClient) : BaseAction() {
     override fun getId() = "VoteKick"
     fun isEnabled(auth: Authentication): Boolean {
         check(auth)
-        return client.sendCommand("get votekickenabled") == "on"
+        return client.getBoolean("get votekickenabled")
     }
 
     fun setEnabled(auth: Authentication, enabled: Boolean): Any {
         check(auth)
-        return client.sendCommand("setvotekickenabled ${if (enabled) "on" else "off"}")
+        return client.setBoolean("setvotekickenabled", enabled)
     }
 
     fun getThreshold(auth: Authentication): Int {
         check(auth)
-        return client.sendCommand("get votekickthreshold").toIntOrNull() ?: -1
+        return client.getInt("get votekickthreshold")
     }
 
     fun setThreshold(auth: Authentication, threshold: Int): Any {
         check(auth)
-        return client.sendCommand("setvotekickthreshold $threshold")
+        return client.setInt("setvotekickthreshold", threshold)
     }
 
     fun resetThreshold(auth: Authentication): Any {
