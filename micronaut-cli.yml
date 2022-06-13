@@ -1,0 +1,6 @@
+applicationType: default
+defaultPackage: de.sambalmueslie.hll.adapter
+testFramework: junit
+sourceLanguage: kotlin
+buildTool: gradle_kotlin
+features: [ annotation-api, app-name, cache-caffeine, data, data-jdbc, flyway, graalvm, gradle, http-client, jackson-databind, jdbc-hikari, junit, kotlin, kotlin-application, kotlin-build, kotlin-extension-functions, logback, micronaut-build, netty-server, openapi, postgres, readme, security, security-annotations, shade, swagger-ui, testcontainers, yaml ]
