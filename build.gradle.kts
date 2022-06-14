@@ -4,6 +4,7 @@ plugins {
     id("org.jetbrains.kotlin.plugin.allopen") version "1.6.21"
     id("com.github.johnrengelman.shadow") version "7.1.2"
     id("io.micronaut.application") version "3.4.1"
+    id("org.sonarqube") version "3.4.0.2513"
 }
 
 version = "0.1"
@@ -75,5 +76,11 @@ micronaut {
     }
 }
 
-
+sonarqube {
+    properties {
+        property("sonar.projectKey", "sambalmueslie_hll-adapter")
+        property("sonar.organization", "sambalmueslie")
+        property("sonar.host.url", "https://sonarcloud.io")
+    }
+}
 
