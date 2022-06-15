@@ -16,7 +16,7 @@ class PlayerKickAction(private val client: HllRconClient) : BaseAction() {
 
     fun kick(auth: Authentication, player: String, reason: String): Any {
         check(auth)
-        return client.sendCommand("kick $player \"$reason\"")
+        return client.sendCommand("kick \"$player\" \"$reason\"")
     }
 
 }
