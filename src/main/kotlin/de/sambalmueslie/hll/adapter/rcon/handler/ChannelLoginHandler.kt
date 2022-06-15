@@ -2,12 +2,13 @@ package de.sambalmueslie.hll.adapter.rcon.handler
 
 
 import de.sambalmueslie.hll.adapter.rcon.RconClient
+import de.sambalmueslie.hll.adapter.rcon.RconClientConfig
 import io.netty.channel.ChannelHandlerContext
 import io.netty.channel.SimpleChannelInboundHandler
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-class ChannelLoginHandler(private val client: RconClient) : SimpleChannelInboundHandler<String>() {
+class ChannelLoginHandler(private val client: RconClient, private val config: RconClientConfig) : SimpleChannelInboundHandler<String>() {
 
     companion object {
         private val logger: Logger = LoggerFactory.getLogger(ChannelLoginHandler::class.java)
@@ -18,7 +19,7 @@ class ChannelLoginHandler(private val client: RconClient) : SimpleChannelInbound
         if (loggedIn) {
             ctx.fireChannelRead(msg)
         } else if (msg.isEmpty()) {
-            val command = "login ${client.config.password}"
+            val command = "login ${config.password}"
             ctx.writeAndFlush(command).sync()
         } else if (msg == "SUCCESS") {
             client.handleLogin(true)

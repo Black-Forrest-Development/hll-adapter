@@ -16,17 +16,17 @@ class ManageVipAction(private val client: HllRconClient) : BaseAction() {
 
     fun get(auth: Authentication): Set<String> {
         check(auth)
-        TODO("Not yet implemented")
+        return client.getSet("get vipids")
     }
 
     fun add(auth: Authentication, steamId: String, description: String): Any {
         check(auth)
-        TODO("Not yet implemented")
+        return client.sendCommand("vipadd $steamId \"$description\"")
     }
 
     fun remove(auth: Authentication, steamId: String): Any {
         check(auth)
-        TODO("Not yet implemented")
+        return client.sendCommand("vipdel $steamId")
     }
 
     fun getSlots(auth: Authentication): Int {

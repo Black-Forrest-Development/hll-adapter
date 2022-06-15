@@ -16,23 +16,23 @@ class TemporaryBanAction(private val client: HllRconClient) : BaseAction() {
 
     fun get(auth: Authentication): Set<String> {
         check(auth)
-        TODO("Not yet implemented")
+        return client.getSet("get tempbans")
     }
 
 
     fun addByName(auth: Authentication, name: String, hours: Int, reason: String, admin: String): Any {
         check(auth)
-        TODO("Not yet implemented")
+        return client.sendCommand("tempban $name $hours \"$reason\" $admin")
     }
 
     fun addBySteamId(auth: Authentication, steamId: String, hours: Int, reason: String, admin: String): Any {
         check(auth)
-        TODO("Not yet implemented")
+        return client.sendCommand("tempban $steamId $hours \"$reason\" $admin")
     }
 
     fun remove(auth: Authentication, player: String): Any {
         check(auth)
-        TODO("Not yet implemented")
+        return client.sendCommand("pardontempban $player")
     }
 
 

@@ -14,7 +14,7 @@ import java.util.concurrent.CompletableFuture
 import java.util.concurrent.atomic.AtomicBoolean
 
 
-class RconClient(val config: RconClientConfig) : HllRconClient {
+class RconClient() : HllRconClient {
 
     companion object {
         val logger: Logger = LoggerFactory.getLogger(RconClient::class.java)
@@ -28,13 +28,13 @@ class RconClient(val config: RconClientConfig) : HllRconClient {
 
     private var connectionFuture = CompletableFuture<Boolean>()
     private var commandFuture = CompletableFuture<String>()
-    private val bootstrap = Bootstrap().group(workerGroup)
-        .channel(NioSocketChannel::class.java)
-        .option(ChannelOption.SO_KEEPALIVE, true)
-        .handler(RconClientInitializer(this))
 
-    override fun connect() {
+    override fun connect(config: RconClientConfig) {
         connectionFuture = CompletableFuture<Boolean>()
+        val bootstrap = Bootstrap().group(workerGroup)
+            .channel(NioSocketChannel::class.java)
+            .option(ChannelOption.SO_KEEPALIVE, true)
+            .handler(RconClientInitializer(this, config))
         channel = bootstrap.connect(config.host, config.port).sync().channel()
         connectionFuture.get()
     }
@@ -69,8 +69,6 @@ class RconClient(val config: RconClientConfig) : HllRconClient {
         logger.error("Connection failed", cause)
         commandFuture.complete("")
         connectionFuture.complete(false)
-
-        connect()
     }
 
     override fun getBoolean(command: String): Boolean {
@@ -86,11 +84,19 @@ class RconClient(val config: RconClientConfig) : HllRconClient {
     }
 
     override fun getList(command: String): List<String> {
-        return sendCommand(command).split("\n")
+        return getArray(command)
     }
 
     override fun getSet(command: String): Set<String> {
-        return sendCommand(command).split("\n").toSet()
+        return getArray(command).toSet()
+    }
+
+    private fun getArray(command: String): List<String> {
+        val result = sendCommand(command)
+        val fields = result.split("\t")
+        if (fields.isEmpty()) return emptyList()
+        val length = fields.first().toIntOrNull() ?: return emptyList()
+        return fields.slice(1..length)
     }
 
     override fun setInt(command: String, value: Int): String {

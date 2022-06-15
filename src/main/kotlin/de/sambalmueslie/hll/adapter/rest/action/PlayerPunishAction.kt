@@ -16,7 +16,7 @@ class PlayerPunishAction(private val client: HllRconClient) : BaseAction() {
 
     fun punish(auth: Authentication, player: String, reason: String): Any {
         check(auth)
-        return client.sendCommand("punish $player $reason")
+        return client.sendCommand("punish $player \"$reason\"")
     }
 
 }

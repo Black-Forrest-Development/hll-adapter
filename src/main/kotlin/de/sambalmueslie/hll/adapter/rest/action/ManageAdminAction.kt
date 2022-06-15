@@ -22,7 +22,7 @@ class ManageAdminAction(private val client: HllRconClient) : BaseAction() {
 
     fun add(auth: Authentication, steamId: String, group: String, comment: String): Any {
         check(auth)
-        return client.sendCommand("adminadd $steamId $group $comment")
+        return client.sendCommand("adminadd $steamId $group \"$comment\"")
     }
 
     fun remove(auth: Authentication, steamId: String): Any {

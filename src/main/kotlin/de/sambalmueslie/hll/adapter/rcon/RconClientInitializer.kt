@@ -9,7 +9,7 @@ import io.netty.handler.logging.LoggingHandler
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-internal class RconClientInitializer(private val client: RconClient) : ChannelInitializer<SocketChannel>() {
+internal class RconClientInitializer(private val client: RconClient, private val config: RconClientConfig) : ChannelInitializer<SocketChannel>() {
 
     companion object {
         private val logger: Logger = LoggerFactory.getLogger(RconClientInitializer::class.java)
@@ -21,7 +21,7 @@ internal class RconClientInitializer(private val client: RconClient) : ChannelIn
         ch.pipeline().addLast("connection", ChannelConnectionHandler(client))
         ch.pipeline().addLast("decoder", ChannelMessageDecoder(client))
         ch.pipeline().addLast("encoder", ChannelMessageEncoder(client))
-        ch.pipeline().addLast("login", ChannelLoginHandler(client))
+        ch.pipeline().addLast("login", ChannelLoginHandler(client,config))
         ch.pipeline().addLast("response", ChannelResponseHandler(client))
     }
 

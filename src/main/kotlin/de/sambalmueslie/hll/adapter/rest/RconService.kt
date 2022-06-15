@@ -4,6 +4,8 @@ package de.sambalmueslie.hll.adapter.rest
 import de.sambalmueslie.hll.adapter.rcon.RconClient
 import de.sambalmueslie.hll.adapter.rcon.RconClientConfig
 import de.sambalmueslie.hll.adapter.rest.action.*
+import de.sambalmueslie.hll.adapter.rest.api.ConnectRequest
+import de.sambalmueslie.hll.adapter.rest.api.Message
 import de.sambalmueslie.hll.adapter.rest.api.Slots
 import io.micronaut.security.authentication.Authentication
 import jakarta.inject.Singleton
@@ -11,18 +13,16 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 @Singleton
-class RconService(
-    config: RconClientConfig
-) {
+class RconService() {
     companion object {
         private val logger: Logger = LoggerFactory.getLogger(RconService::class.java)
     }
 
-    private val client = RconClient(config)
-
-    init {
-        client.connect()
+    private val client = RconClient()
+    fun connect(request: ConnectRequest): Any {
+        return client.connect(RconClientConfig(request.host, request.port, request.password))
     }
+
 
     private val serverAdminLogAction = ServerAdminLogAction(client)
     fun getAdminLog(auth: Authentication, minutes: Int, filter: String): List<String> {
@@ -49,7 +49,7 @@ class RconService(
     }
 
     private val serverMessageAction = ServerMessageAction(client)
-    fun setServerMessage(auth: Authentication, message: String): Any {
+    fun setServerMessage(auth: Authentication, message: Message): Any {
         return serverMessageAction.set(auth, message)
     }
 
@@ -165,7 +165,7 @@ class RconService(
         return voteKickAction.isEnabled(auth)
     }
 
-    fun setVoteKick(auth: Authentication, enabled: Boolean): Any {
+    fun setVoteKickEnabled(auth: Authentication, enabled: Boolean): Any {
         return voteKickAction.setEnabled(auth, enabled)
     }
 
@@ -211,7 +211,7 @@ class RconService(
         return autoBalanceAction.isEnabled(auth)
     }
 
-    fun setAutoBalance(auth: Authentication, enabled: Boolean): Any {
+    fun setAutoBalanceEnabled(auth: Authentication, enabled: Boolean): Any {
         return autoBalanceAction.setEnabled(auth, enabled)
     }
 
@@ -248,7 +248,7 @@ class RconService(
     }
 
     private val broadcastAction = BroadcastAction(client)
-    fun broadcast(auth: Authentication, message: String): Any {
+    fun broadcast(auth: Authentication, message: Message): Any {
         return broadcastAction.broadcast(auth, message)
     }
 

@@ -1,7 +1,9 @@
 package de.sambalmueslie.hll.adapter.rcon.api
 
+import de.sambalmueslie.hll.adapter.rcon.RconClientConfig
+
 interface HllRconClient {
-    fun connect()
+    fun connect(config: RconClientConfig)
     fun sendCommand(command: String): String
     fun disconnect()
     fun getSet(command: String): Set<String>
