@@ -8,7 +8,7 @@ import io.swagger.v3.oas.annotations.tags.Tag
 
 @Controller("api/player")
 @Tag(name = "Player API")
-class HllPlayerController(private val service: RconService) : HllPlayerAPI {
+class HllPlayerController(private val service: HllPlayerService) : HllPlayerAPI {
 
     @Get("/bans/temporary")
     override fun getTempBans(auth: Authentication): Set<String> = service.getTempBans(auth)

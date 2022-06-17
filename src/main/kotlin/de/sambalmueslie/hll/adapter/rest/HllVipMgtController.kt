@@ -8,7 +8,7 @@ import io.swagger.v3.oas.annotations.tags.Tag
 
 @Controller("api/vip")
 @Tag(name = "VIP Mgt API")
-class HllVipMgtController(private val service: RconService) : HllVipMgtAPI {
+class HllVipMgtController(private val service: HllVipMgtService) : HllVipMgtAPI {
     @Get("/slots")
     override fun getNumVipSlots(auth: Authentication): Int = service.getNumVipSlots(auth)
 

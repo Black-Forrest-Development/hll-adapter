@@ -8,7 +8,7 @@ import io.swagger.v3.oas.annotations.tags.Tag
 
 @Controller("api/profanity")
 @Tag(name = "Profanity API")
-class HllProfanityController(private val service: RconService) : HllProfanityAPI {
+class HllProfanityController(private val service: HllProfanityService) : HllProfanityAPI {
     @Get()
     override fun getProfanityWords(auth: Authentication): Set<String> = service.getProfanityWords(auth)
 

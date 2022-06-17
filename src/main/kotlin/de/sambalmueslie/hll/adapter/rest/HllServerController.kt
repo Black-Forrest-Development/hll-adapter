@@ -7,11 +7,10 @@ import de.sambalmueslie.hll.adapter.rest.api.Slots
 import io.micronaut.http.annotation.*
 import io.micronaut.security.authentication.Authentication
 import io.swagger.v3.oas.annotations.tags.Tag
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
+
 @Controller("api/server")
 @Tag(name = "Server API")
-class HllServerController(private val service: RconService) : HllServerAPI {
+class HllServerController(private val service: HllServerService) : HllServerAPI {
     @Get("/name")
     override fun getName(auth: Authentication): String = service.getServerName(auth)
     @Get("/slots")

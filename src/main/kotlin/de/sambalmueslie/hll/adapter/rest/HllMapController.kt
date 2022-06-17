@@ -8,7 +8,7 @@ import io.swagger.v3.oas.annotations.tags.Tag
 
 @Controller("api/map")
 @Tag(name = "Map API")
-class HllMapController(private val service: RconService) : HllMapAPI {
+class HllMapController(private val service: HllMapService) : HllMapAPI {
     @Get("/available")
     override fun getMaps(auth: Authentication): Set<String> = service.getMaps(auth)
 
@@ -16,7 +16,7 @@ class HllMapController(private val service: RconService) : HllMapAPI {
     override fun getCurrentMap(auth: Authentication): String = service.getCurrentMap(auth)
 
     @Post("/{name}")
-    override fun setCurrentMap(auth: Authentication, @PathVariable name: String) = service.changeMap(auth, name)
+    override fun setCurrentMap(auth: Authentication, @PathVariable name: String) = service.setCurrentMap(auth, name)
 
     @Get("/rotation")
     override fun getMapsInRotation(auth: Authentication): Set<String> = service.getMapsInRotation(auth)

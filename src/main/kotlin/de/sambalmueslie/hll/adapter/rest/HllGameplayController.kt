@@ -8,7 +8,7 @@ import io.swagger.v3.oas.annotations.tags.Tag
 
 @Controller("api/gameplay")
 @Tag(name = "Gameplay API")
-class HllGameplayController(private val service: RconService) : HllGameplayAPI {
+class HllGameplayController(private val service: HllGameplayService) : HllGameplayAPI {
 
     @Get("/team-switch/cool-down")
     override fun getTeamSwitchCoolDown(auth: Authentication): Int = service.getTeamSwitchCoolDown(auth)

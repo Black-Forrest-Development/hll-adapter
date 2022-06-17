@@ -8,7 +8,7 @@ import io.swagger.v3.oas.annotations.tags.Tag
 
 @Controller("api/admin")
 @Tag(name = "Admin Mgt API")
-class HllAdminMgtController(private val service: RconService) : HllAdminMgtAPI {
+class HllAdminMgtController(private val service: HllAdminMgtService) : HllAdminMgtAPI {
 
     @Get("/groups")
     override fun getAdminGroups(auth: Authentication): Set<String> = service.getAdminGroups(auth)
