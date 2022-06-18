@@ -17,6 +17,6 @@ class ServerSlotsAction(private val client: HllRconClient) : BaseAction(logger) 
     override fun getId() = ID
 
 
-    fun get(auth: Authentication) = execute(auth, client, "get slots")?.let { Slots.parse(it) }
+    fun get(auth: Authentication) = execute(auth, client, "get slots").let { Slots.parse(it) }
 
 }

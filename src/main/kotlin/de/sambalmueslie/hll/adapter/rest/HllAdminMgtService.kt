@@ -4,7 +4,6 @@ package de.sambalmueslie.hll.adapter.rest
 import de.sambalmueslie.hll.adapter.action.ActionService
 import de.sambalmueslie.hll.adapter.action.ManageAdminAction
 import de.sambalmueslie.hll.adapter.rest.error.InvalidConfigurationException
-import de.sambalmueslie.hll.adapter.rest.error.RequestFailedException
 import io.micronaut.security.authentication.Authentication
 import jakarta.inject.Singleton
 import org.slf4j.Logger

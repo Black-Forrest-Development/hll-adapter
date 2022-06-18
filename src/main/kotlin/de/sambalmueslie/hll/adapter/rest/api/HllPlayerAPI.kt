@@ -17,6 +17,7 @@ interface HllPlayerAPI {
     fun playerKick(auth: Authentication, player: String, reason: String): Any
 
     fun getPlayerNames(auth: Authentication): Set<String>
+
     fun getPlayerInfo(auth: Authentication, player: String): Any
 
     fun switchPlayerOnDeath(auth: Authentication, player: String): Any

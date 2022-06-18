@@ -26,12 +26,13 @@ class RconClient() : HllRconClient {
     internal val isConnected = AtomicBoolean(false)
     private val isLoggedIn = AtomicBoolean(false)
     internal var key: ByteArray = ByteArray(4)
-    private lateinit var channel: Channel
+    private var channel: Channel? = null
 
     private var connectionFuture = CompletableFuture<Boolean>()
     private var commandFuture = CompletableFuture<String>()
 
     override fun connect(config: RconClientConfig) {
+        if(channel != null) disconnect()
         connectionFuture = CompletableFuture<Boolean>()
         val bootstrap = Bootstrap().group(workerGroup)
             .channel(NioSocketChannel::class.java)
@@ -42,14 +43,16 @@ class RconClient() : HllRconClient {
     }
 
     override fun disconnect() {
-        channel.disconnect().sync()
+        if(channel == null) return
+        channel!!.disconnect().sync()
+        channel = null
     }
 
     override fun sendCommand(command: String): String {
         if (!isLoggedIn()) return ""
         commandFuture = CompletableFuture<String>()
         logger.trace("Send command: [$command]")
-        channel.writeAndFlush(command).sync()
+        channel?.writeAndFlush(command)?.sync()
         return commandFuture.get()
     }
 
@@ -57,7 +60,7 @@ class RconClient() : HllRconClient {
         if (!isLoggedIn()) return HllRconResponse(false, "", "Client is not logged in")
         commandFuture = CompletableFuture<String>()
         logger.trace("Send command: [${request.content}]")
-        channel.writeAndFlush(request.content).sync()
+        channel?.writeAndFlush(request.content)?.sync()
         val result = commandFuture.get()
         return HllRconResponse(true, result, "")
     }
