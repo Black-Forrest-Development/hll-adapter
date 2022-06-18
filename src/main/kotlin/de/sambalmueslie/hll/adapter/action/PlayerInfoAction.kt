@@ -17,6 +17,6 @@ class PlayerInfoAction(private val client: HllRconClient) : BaseAction(logger) {
     override fun getId() = ID
 
 
-    fun get(auth: Authentication, player: String)= execute(auth, "playerinfo $player") { client.sendCommand(it) }
+    fun get(auth: Authentication, player: String)= execute(auth,client, "playerinfo $player") 
 
 }

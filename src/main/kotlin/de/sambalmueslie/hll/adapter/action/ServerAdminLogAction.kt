@@ -2,6 +2,7 @@ package de.sambalmueslie.hll.adapter.action
 
 
 import de.sambalmueslie.hll.adapter.rcon.api.HllRconClient
+import de.sambalmueslie.hll.adapter.rcon.api.HllRconRequest
 import io.micronaut.security.authentication.Authentication
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -16,6 +17,8 @@ class ServerAdminLogAction(private val client: HllRconClient) : BaseAction(logge
     override fun getId() = ID
 
 
-    fun get(auth: Authentication, minutes: Int, filter: String)= execute(auth, "showlog $minutes $filter") { client.getList(it) }
+    fun get(auth: Authentication, minutes: Int, filter: String) = execute(auth, client, HllRconRequest("showlog $minutes $filter")) {
+        it.content.split("\n")
+    }
 
 }

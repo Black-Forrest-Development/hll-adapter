@@ -15,6 +15,6 @@ class ServerPlayerAction(private val client: HllRconClient) : BaseAction(logger)
 
     override fun getId() = ID
 
-    fun get(auth: Authentication)= execute(auth, "get players") { client.getSet(it) }
+    fun get(auth: Authentication)= getSet(auth,client, "get players")
 
 }

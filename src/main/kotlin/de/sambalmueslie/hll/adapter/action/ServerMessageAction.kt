@@ -2,6 +2,7 @@ package de.sambalmueslie.hll.adapter.action
 
 
 import de.sambalmueslie.hll.adapter.rcon.api.HllRconClient
+import de.sambalmueslie.hll.adapter.rcon.builder.HllRconRequestBuilder
 import de.sambalmueslie.hll.adapter.rest.api.Message
 import io.micronaut.security.authentication.Authentication
 import org.slf4j.Logger
@@ -16,6 +17,8 @@ class ServerMessageAction(private val client: HllRconClient) : BaseAction(logger
 
     override fun getId() = ID
 
-    fun set(auth: Authentication, message: Message)= execute(auth, "say \"${message.content}\"") { client.sendCommand(it) }
+    fun set(auth: Authentication, message: Message)= execute(auth,client) {
+        HllRconRequestBuilder("say").escape(message.content).build()
+    }
 
 }

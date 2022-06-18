@@ -16,8 +16,8 @@ class CurrentMapAction(private val client: HllRconClient) : BaseAction(logger) {
 
     override fun getId() = ID
 
-    fun get(auth: Authentication) = execute(auth, "get map") { client.sendCommand(it) }
+    fun get(auth: Authentication) = getString(auth, client, "get map")
 
-    fun set(auth: Authentication, name: String) = execute(auth, "map $name") { client.sendCommand(it) }
+    fun set(auth: Authentication, name: String) = setValue(auth, client, "map $name")
 
 }

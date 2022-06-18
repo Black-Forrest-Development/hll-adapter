@@ -2,6 +2,7 @@ package de.sambalmueslie.hll.adapter.action
 
 
 import de.sambalmueslie.hll.adapter.rcon.api.HllRconClient
+import de.sambalmueslie.hll.adapter.rcon.builder.HllRconRequestBuilder
 import io.micronaut.security.authentication.Authentication
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -15,12 +16,16 @@ class PermanentBanAction(private val client: HllRconClient) : BaseAction(logger)
 
     override fun getId() = ID
 
-    fun get(auth: Authentication) = execute(auth, "get permabans") { client.getSet(it) }
+    fun get(auth: Authentication) = getSet(auth, client, "get permabans")
 
-    fun addByName(auth: Authentication, name: String, reason: String, admin: String) = execute(auth, "permaban $name \"$reason\" $admin") { client.sendCommand(it) }
+    fun addByName(auth: Authentication, name: String, reason: String, admin: String) = execute(auth, client) {
+        HllRconRequestBuilder("permaban").add(name).escape(reason).add(admin).build()
+    }
 
-    fun addBySteamId(auth: Authentication, steamId: String, reason: String, admin: String) = execute(auth, "permaban $steamId \"$reason\" $admin") { client.sendCommand(it) }
+    fun addBySteamId(auth: Authentication, steamId: String, reason: String, admin: String) = execute(auth, client) {
+        HllRconRequestBuilder("permaban").add(steamId).escape(reason).add(admin).build()
+    }
 
-    fun remove(auth: Authentication, player: String) = execute(auth, "pardonpermaban $player") { client.sendCommand(it) }
+    fun remove(auth: Authentication, player: String) = execute(auth, client, "pardonpermaban $player")
 
 }

@@ -15,8 +15,8 @@ class HighPingAction(private val client: HllRconClient) : BaseAction(logger) {
 
     override fun getId() = ID
 
-    fun get(auth: Authentication)= execute(auth, "get highping") { client.getInt(it) }
+    fun get(auth: Authentication) = getInt(auth, client, "get highping")
 
-    fun set(auth: Authentication, millis: Int)= execute(auth, "sethighping $millis") { client.sendCommand(it) }
+    fun set(auth: Authentication, millis: Int) = setValue(auth, client, "sethighping $millis")
 
 }

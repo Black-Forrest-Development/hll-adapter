@@ -2,6 +2,8 @@ package de.sambalmueslie.hll.adapter.rcon
 
 
 import de.sambalmueslie.hll.adapter.rcon.api.HllRconClient
+import de.sambalmueslie.hll.adapter.rcon.api.HllRconRequest
+import de.sambalmueslie.hll.adapter.rcon.api.HllRconResponse
 import io.netty.bootstrap.Bootstrap
 import io.netty.channel.Channel
 import io.netty.channel.ChannelOption
@@ -51,6 +53,15 @@ class RconClient() : HllRconClient {
         return commandFuture.get()
     }
 
+    override fun send(request: HllRconRequest): HllRconResponse {
+        if (!isLoggedIn()) return HllRconResponse(false, "", "Client is not logged in")
+        commandFuture = CompletableFuture<String>()
+        logger.trace("Send command: [${request.content}]")
+        channel.writeAndFlush(request.content).sync()
+        val result = commandFuture.get()
+        return HllRconResponse(true, result, "")
+    }
+
 
     fun handleResponse(msg: String) {
         logger.trace("Got a message: [$msg]")
@@ -69,42 +80,6 @@ class RconClient() : HllRconClient {
         logger.error("Connection failed", cause)
         commandFuture.complete("")
         connectionFuture.complete(false)
-    }
-
-    override fun getBoolean(command: String): Boolean {
-        return sendCommand(command) == "on"
-    }
-
-    override fun setBoolean(command: String, value: Boolean): String {
-        return sendCommand("$command ${if (value) "on" else "off"}")
-    }
-
-    override fun getInt(command: String): Int {
-        return sendCommand(command).toIntOrNull() ?: -1
-    }
-
-    override fun getList(command: String): List<String> {
-        return getArray(command)
-    }
-
-    override fun getSet(command: String): Set<String> {
-        return getArray(command).toSet()
-    }
-
-    private fun getArray(command: String): List<String> {
-        val result = sendCommand(command)
-        val fields = result.split("\t")
-        if (fields.isEmpty()) return emptyList()
-        val length = fields.first().toIntOrNull() ?: return emptyList()
-        return fields.slice(1..length)
-    }
-
-    override fun setInt(command: String, value: Int): String {
-        return sendCommand("$command $value")
-    }
-
-    override fun setList(command: String, words: List<String>): String {
-        return sendCommand("$command ${words.joinToString(",")}")
     }
 
 

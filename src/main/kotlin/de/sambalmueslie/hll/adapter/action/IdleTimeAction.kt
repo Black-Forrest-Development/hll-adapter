@@ -15,8 +15,8 @@ class IdleTimeAction(private val client: HllRconClient) : BaseAction(logger) {
 
     override fun getId() = ID
 
-    fun get(auth: Authentication)= execute(auth, "get idletime") { client.getInt(it) }
+    fun get(auth: Authentication) = getInt(auth, client, "get idletime")
 
-    fun set(auth: Authentication, minutes: Int)= execute(auth, "setkickidletime $minutes") { client.sendCommand(it) }
+    fun set(auth: Authentication, minutes: Int) = setValue(auth, client, "setkickidletime $minutes")
 
 }

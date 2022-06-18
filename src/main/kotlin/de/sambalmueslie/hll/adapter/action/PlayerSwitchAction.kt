@@ -15,8 +15,8 @@ class PlayerSwitchAction(private val client: HllRconClient) : BaseAction(logger)
 
     override fun getId() = ID
 
-    fun switchOnDeath(auth: Authentication, player: String)= execute(auth, "switchteamondeath $player") { client.sendCommand(it) }
+    fun switchOnDeath(auth: Authentication, player: String)= execute(auth, client,"switchteamondeath $player")
 
-    fun switchImmediately(auth: Authentication, player: String)= execute(auth, "switchteamnow $player") { client.sendCommand(it) }
+    fun switchImmediately(auth: Authentication, player: String)= execute(auth,client, "switchteamnow $player")
 
 }

@@ -16,7 +16,7 @@ class TeamSwitchCoolDownAction(private val client: HllRconClient) : BaseAction(l
     override fun getId() = ID
 
 
-    fun get(auth: Authentication)= execute(auth, "get teamswitchcooldown") { client.getInt(it) }
+    fun get(auth: Authentication) = getInt(auth, client, "get teamswitchcooldown")
 
-    fun set(auth: Authentication, coolDown: Int)= execute(auth, "setteamswitchcooldown $coolDown") { client.sendCommand(it) }
+    fun set(auth: Authentication, coolDown: Int) = execute(auth, client, "setteamswitchcooldown $coolDown")
 }

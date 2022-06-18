@@ -15,8 +15,8 @@ class MaxQueuedPlayersAction(private val client: HllRconClient) : BaseAction(log
 
     override fun getId() = ID
 
-    fun set(auth: Authentication, max: Int)= execute(auth, "setmaxqueuedplayers $max") { client.sendCommand(it) }
+    fun set(auth: Authentication, max: Int)= execute(auth, client,"setmaxqueuedplayers $max")
 
-    fun get(auth: Authentication)= execute(auth, "get maxqueuedplayers") { client.getInt(it) }
+    fun get(auth: Authentication)= getInt(auth, client,"get maxqueuedplayers")
 
 }

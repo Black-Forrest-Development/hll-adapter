@@ -15,10 +15,10 @@ class MapRotationAction(private val client: HllRconClient) : BaseAction(logger) 
 
     override fun getId() = ID
 
-    fun get(auth: Authentication)= execute(auth, "rotlist") { client.getSet(it) }
+    fun get(auth: Authentication) = getSet(auth, client, "rotlist")
 
-    fun add(auth: Authentication, name: String)= execute(auth, "rotadd $name") { client.sendCommand(it) }
+    fun add(auth: Authentication, name: String) = execute(auth, client, "rotadd $name")
 
-    fun remove(auth: Authentication, name: String)= execute(auth, "rotdel $name") { client.sendCommand(it) }
+    fun remove(auth: Authentication, name: String) = execute(auth, client, "rotdel $name")
 
 }

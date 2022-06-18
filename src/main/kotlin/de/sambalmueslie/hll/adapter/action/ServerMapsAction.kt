@@ -15,6 +15,6 @@ class ServerMapsAction(private val client: HllRconClient) : BaseAction(logger) {
 
     override fun getId() = ID
 
-    fun get(auth: Authentication) = execute(auth, "get mapsforrotation") { client.getSet(it) }
+    fun get(auth: Authentication) = getSet(auth,client, "get mapsforrotation")
 
 }

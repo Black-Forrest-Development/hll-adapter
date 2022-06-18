@@ -15,6 +15,6 @@ class ServerNameAction(private val client: HllRconClient) : BaseAction(logger) {
 
     override fun getId() = ID
 
-    fun get(auth: Authentication)= execute(auth, "get name") { client.sendCommand(it) }
+    fun get(auth: Authentication)= execute(auth,client, "get name")
 
 }
