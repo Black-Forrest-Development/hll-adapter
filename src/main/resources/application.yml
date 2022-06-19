@@ -38,10 +38,20 @@ datasources:
     driverClassName: org.postgresql.Driver
     username: postgres
     password: postgres
-    schema-generate: CREATE_DROP
+    schema-generate: NONE
     dialect: POSTGRES
+    schema: hll_adapter
 
 netty:
   default:
     allocator:
       max-order: 3
+
+flyway:
+  datasources:
+    default:
+      enabled: true
+      default-schema: hll_adapter
+      create-schemas: true
+      schemas: hll_adapter
+      clean-schema: false

@@ -17,6 +17,6 @@
     <logger name="io.micronaut.runtime" level="INFO"/>
     <logger name="io.micronaut.security" level="INFO"/>
     <logger name="org.flywaydb" level="INFO"/>
-    <logger name="io.micronaut.core.io.service" level="DEBUG"/>
+    <logger name="io.micronaut.core.io.service" level="INFO"/>
     <logger name="de.sambalmueslie" level="DEBUG"/>
 </configuration>

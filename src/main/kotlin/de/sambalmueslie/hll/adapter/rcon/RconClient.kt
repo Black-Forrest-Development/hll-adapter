@@ -27,23 +27,30 @@ class RconClient() : HllRconClient {
     private val isLoggedIn = AtomicBoolean(false)
     internal var key: ByteArray = ByteArray(4)
     private var channel: Channel? = null
+    internal var config: RconClientConfig = RconClientConfig("127.0.0.1", 28316, "")
 
     private var connectionFuture = CompletableFuture<Boolean>()
     private var commandFuture = CompletableFuture<String>()
 
+    private val bootstrap = Bootstrap().group(workerGroup)
+        .channel(NioSocketChannel::class.java)
+        .option(ChannelOption.SO_KEEPALIVE, true)
+        .handler(RconClientInitializer(this))
+
     override fun connect(config: RconClientConfig) {
-        if(channel != null) disconnect()
+        if (channel != null) disconnect()
+        this.config = config
+        connect()
+    }
+
+    private fun connect() {
         connectionFuture = CompletableFuture<Boolean>()
-        val bootstrap = Bootstrap().group(workerGroup)
-            .channel(NioSocketChannel::class.java)
-            .option(ChannelOption.SO_KEEPALIVE, true)
-            .handler(RconClientInitializer(this, config))
         channel = bootstrap.connect(config.host, config.port).sync().channel()
         connectionFuture.get()
     }
 
     override fun disconnect() {
-        if(channel == null) return
+        if (channel == null) return
         channel!!.disconnect().sync()
         channel = null
     }
