@@ -27,8 +27,4 @@ class ServerConfigController(private val service: ServerConfigService) {
     @Delete("/{id}")
     fun delete(authentication: Authentication, @PathVariable id: Long) = service.delete(authentication, id)
 
-
-
-
-
 }
