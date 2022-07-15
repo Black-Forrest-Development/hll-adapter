@@ -15,11 +15,11 @@ class HllProfanityService(private val actionService: ActionService) {
     companion object {
         private val logger: Logger = LoggerFactory.getLogger(HllProfanityService::class.java)
     }
-    fun getProfanityWords(auth: Authentication) = getManageProfanityWordsAction().get(auth)
+    fun getProfanityWords(auth: Authentication, serverId: Long) = getManageProfanityWordsAction().get(auth,serverId)
 
-    fun profanityWordsAdd(auth: Authentication, words: List<String>) = getManageProfanityWordsAction().add(auth, words)
+    fun profanityWordsAdd(auth: Authentication, serverId: Long, words: List<String>) = getManageProfanityWordsAction().add(auth,serverId, words)
 
-    fun profanityWordsRemove(auth: Authentication, word: String) = getManageProfanityWordsAction().remove(auth, word)
+    fun profanityWordsRemove(auth: Authentication, serverId: Long, word: String) = getManageProfanityWordsAction().remove(auth,serverId, word)
 
     private fun getManageProfanityWordsAction(): ManageProfanityWordsAction = actionService.get(ManageProfanityWordsAction.ID) ?: throw InvalidConfigurationException("Cannot find ManageProfanityWordsAction")
 }

@@ -9,20 +9,20 @@ import io.swagger.v3.oas.annotations.tags.Tag
 @Controller("api/vip")
 @Tag(name = "VIP Mgt API")
 class HllVipMgtController(private val service: HllVipMgtService) : HllVipMgtAPI {
-    @Get("/slots")
-    override fun getNumVipSlots(auth: Authentication): Int = service.getNumVipSlots(auth)
+    @Get("/{serverId}/slots")
+    override fun getNumVipSlots(auth: Authentication, @PathVariable serverId: Long): Int = service.getNumVipSlots(auth,serverId)
 
-    @Put("/slots")
-    override fun setNumVipSlots(auth: Authentication, @QueryValue() max: Int) = service.setNumVipSlots(auth, max)
+    @Put("/{serverId}/slots")
+    override fun setNumVipSlots(auth: Authentication, @PathVariable serverId: Long, @QueryValue() max: Int) = service.setNumVipSlots(auth,serverId, max)
 
-    @Get()
-    override fun getVipIds(auth: Authentication): Set<String> = service.getVipIds(auth)
+    @Get("/{serverId}")
+    override fun getVipIds(auth: Authentication, @PathVariable serverId: Long): Set<String> = service.getVipIds(auth,serverId)
 
-    @Post("/{steamId}")
-    override fun vipAdd(auth: Authentication, @PathVariable steamId: String, @QueryValue() description: String) = service.vipAdd(auth, steamId, description)
+    @Post("/{serverId}/{steamId}")
+    override fun vipAdd(auth: Authentication, @PathVariable serverId: Long, @PathVariable steamId: String, @QueryValue() description: String) = service.vipAdd(auth,serverId, steamId, description)
 
-    @Delete("/{steamId}")
-    override fun vipRemove(auth: Authentication, @PathVariable steamId: String) = service.vipRemove(auth, steamId)
+    @Delete("/{serverId}/{steamId}")
+    override fun vipRemove(auth: Authentication, @PathVariable serverId: Long, @PathVariable steamId: String) = service.vipRemove(auth,serverId, steamId)
 
 
 }

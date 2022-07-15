@@ -16,10 +16,10 @@ class HllAdminMgtService(private val actionService: ActionService) {
         private val logger: Logger = LoggerFactory.getLogger(HllAdminMgtService::class.java)
     }
 
-    fun getAdminGroups(auth: Authentication) = getManageAdminAction().getGroups(auth)
-    fun getAdminIds(auth: Authentication) = getManageAdminAction().get(auth)
-    fun adminAdd(auth: Authentication, steamId: String, group: String, comment: String) = getManageAdminAction().add(auth, steamId, group, comment)
-    fun adminRemove(auth: Authentication, steamId: String) = getManageAdminAction().remove(auth, steamId)
+    fun getAdminGroups(auth: Authentication, serverId: Long) = getManageAdminAction().getGroups(auth,serverId)
+    fun getAdminIds(auth: Authentication, serverId: Long) = getManageAdminAction().get(auth,serverId)
+    fun adminAdd(auth: Authentication, serverId: Long, steamId: String, group: String, comment: String) = getManageAdminAction().add(auth,serverId, steamId, group, comment)
+    fun adminRemove(auth: Authentication, serverId: Long, steamId: String) = getManageAdminAction().remove(auth,serverId, steamId)
 
     private fun getManageAdminAction(): ManageAdminAction = actionService.get(ManageAdminAction.ID) ?: throw InvalidConfigurationException("Cannot find ManageAdminAction")
 }

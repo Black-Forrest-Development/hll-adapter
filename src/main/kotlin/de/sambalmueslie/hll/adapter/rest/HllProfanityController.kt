@@ -9,12 +9,12 @@ import io.swagger.v3.oas.annotations.tags.Tag
 @Controller("api/profanity")
 @Tag(name = "Profanity API")
 class HllProfanityController(private val service: HllProfanityService) : HllProfanityAPI {
-    @Get()
-    override fun getProfanityWords(auth: Authentication): Set<String> = service.getProfanityWords(auth)
+    @Get("/{serverId}")
+    override fun getProfanityWords(auth: Authentication, @PathVariable serverId: Long): Set<String> = service.getProfanityWords(auth,serverId)
 
-    @Put()
-    override fun profanityWordsAdd(auth: Authentication, @Body words: List<String>) = service.profanityWordsAdd(auth, words)
+    @Put("/{serverId}")
+    override fun profanityWordsAdd(auth: Authentication, @PathVariable serverId: Long, @Body words: List<String>) = service.profanityWordsAdd(auth,serverId, words)
 
-    @Delete()
-    override fun profanityWordsRemove(auth: Authentication, @QueryValue word: String) = service.profanityWordsRemove(auth, word)
+    @Delete("/{serverId}")
+    override fun profanityWordsRemove(auth: Authentication, @PathVariable serverId: Long, @QueryValue word: String) = service.profanityWordsRemove(auth,serverId, word)
 }

@@ -10,15 +10,16 @@ import io.swagger.v3.oas.annotations.tags.Tag
 @Tag(name = "Admin Mgt API")
 class HllAdminMgtController(private val service: HllAdminMgtService) : HllAdminMgtAPI {
 
-    @Get("/groups")
-    override fun getAdminGroups(auth: Authentication): Set<String> = service.getAdminGroups(auth)
+    @Get("/{serverId}/groups")
+    override fun getAdminGroups(auth: Authentication, @PathVariable serverId: Long): Set<String> = service.getAdminGroups(auth, serverId)
 
-    @Get()
-    override fun getAdminIds(auth: Authentication): Set<String> = service.getAdminIds(auth)
+    @Get("/{serverId}")
+    override fun getAdminIds(auth: Authentication, @PathVariable serverId: Long): Set<String> = service.getAdminIds(auth, serverId)
 
-    @Post("/{steamId}")
-    override fun adminAdd(auth: Authentication, @PathVariable steamId: String, @QueryValue() group: String, @QueryValue() comment: String) = service.adminAdd(auth, steamId, group, comment)
+    @Post("/{serverId}/{steamId}")
+    override fun adminAdd(auth: Authentication, @PathVariable serverId: Long, @PathVariable steamId: String, @QueryValue() group: String, @QueryValue() comment: String) =
+        service.adminAdd(auth, serverId, steamId, group, comment)
 
-    @Delete("/{steamId}")
-    override fun adminRemove(auth: Authentication, @PathVariable steamId: String) = service.adminRemove(auth, steamId)
+    @Delete("/{serverId}/{steamId}")
+    override fun adminRemove(auth: Authentication, @PathVariable serverId: Long, @PathVariable steamId: String) = service.adminRemove(auth, serverId, steamId)
 }

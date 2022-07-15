@@ -1,12 +1,13 @@
 package de.sambalmueslie.hll.adapter.action
 
 
+import de.sambalmueslie.hll.adapter.rcon.RconClientService
 import de.sambalmueslie.hll.adapter.rcon.api.HllRconClient
 import io.micronaut.security.authentication.Authentication
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-class CurrentMapAction(private val client: HllRconClient) : BaseAction(logger) {
+class CurrentMapAction(clientService: RconClientService) : BaseAction(clientService,logger) {
 
 
     companion object {
@@ -16,8 +17,8 @@ class CurrentMapAction(private val client: HllRconClient) : BaseAction(logger) {
 
     override fun getId() = ID
 
-    fun get(auth: Authentication) = getString(auth, client, "get map")
+    fun get(auth: Authentication, serverId: Long) = getString(auth, serverId, "get map")
 
-    fun set(auth: Authentication, name: String) = setValue(auth, client, "map $name")
+    fun set(auth: Authentication, serverId: Long, name: String) = setValue(auth, serverId, "map $name")
 
 }

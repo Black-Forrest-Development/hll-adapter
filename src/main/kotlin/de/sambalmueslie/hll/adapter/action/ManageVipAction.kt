@@ -1,13 +1,13 @@
 package de.sambalmueslie.hll.adapter.action
 
 
-import de.sambalmueslie.hll.adapter.rcon.api.HllRconClient
+import de.sambalmueslie.hll.adapter.rcon.RconClientService
 import de.sambalmueslie.hll.adapter.rcon.builder.HllRconRequestBuilder
 import io.micronaut.security.authentication.Authentication
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-class ManageVipAction(private val client: HllRconClient) : BaseAction(logger) {
+class ManageVipAction(clientService: RconClientService) : BaseAction(clientService, logger) {
 
     companion object {
         private val logger: Logger = LoggerFactory.getLogger(ManageVipAction::class.java)
@@ -16,15 +16,15 @@ class ManageVipAction(private val client: HllRconClient) : BaseAction(logger) {
 
     override fun getId() = ID
 
-    fun get(auth: Authentication) = getSet(auth, client, "get vipids")
+    fun get(auth: Authentication, serverId: Long) = getSet(auth, serverId, "get vipids")
 
-    fun add(auth: Authentication, steamId: String, description: String) = execute(auth, client) {
+    fun add(auth: Authentication, serverId: Long, steamId: String, description: String) = execute(auth, serverId) {
         HllRconRequestBuilder("vipadd").add(steamId).escape(description).build()
     }
 
-    fun remove(auth: Authentication, steamId: String) = execute(auth, client, "vipdel $steamId")
+    fun remove(auth: Authentication, serverId: Long, steamId: String) = execute(auth, serverId, "vipdel $steamId")
 
-    fun getSlots(auth: Authentication) = getInt(auth, client, "get numvipslots")
+    fun getSlots(auth: Authentication, serverId: Long) = getInt(auth, serverId, "get numvipslots")
 
-    fun setSlots(auth: Authentication, max: Int) = execute(auth, client, "setnumvipslots $max")
+    fun setSlots(auth: Authentication, serverId: Long, max: Int) = execute(auth, serverId, "setnumvipslots $max")
 }

@@ -10,55 +10,55 @@ import io.swagger.v3.oas.annotations.tags.Tag
 @Tag(name = "Gameplay API")
 class HllGameplayController(private val service: HllGameplayService) : HllGameplayAPI {
 
-    @Get("/team-switch/cool-down")
-    override fun getTeamSwitchCoolDown(auth: Authentication): Int = service.getTeamSwitchCoolDown(auth)
+    @Get("/{serverId}/team-switch/cool-down")
+    override fun getTeamSwitchCoolDown(auth: Authentication, @PathVariable serverId: Long): Int = service.getTeamSwitchCoolDown(auth,serverId)
 
-    @Put("/team-switch/cool-down")
-    override fun setTeamSwitchCoolDown(auth: Authentication, @QueryValue() coolDown: Int) = service.setTeamSwitchCoolDown(auth, coolDown)
+    @Put("/{serverId}/team-switch/cool-down")
+    override fun setTeamSwitchCoolDown(auth: Authentication, @PathVariable serverId: Long, @QueryValue() coolDown: Int) = service.setTeamSwitchCoolDown(auth,serverId, coolDown)
 
-    @Get("/auto-balance/enabled")
-    override fun isAutoBalanceEnabled(auth: Authentication): Boolean = service.isAutoBalanceEnabled(auth)
+    @Get("/{serverId}/auto-balance/enabled")
+    override fun isAutoBalanceEnabled(auth: Authentication, @PathVariable serverId: Long): Boolean = service.isAutoBalanceEnabled(auth,serverId)
 
-    @Put("/auto-balance/enabled")
-    override fun setAutoBalanceEnabled(auth: Authentication, @QueryValue() enabled: Boolean) = service.setAutoBalanceEnabled(auth, enabled)
+    @Put("/{serverId}/auto-balance/enabled")
+    override fun setAutoBalanceEnabled(auth: Authentication, @PathVariable serverId: Long, @QueryValue() enabled: Boolean) = service.setAutoBalanceEnabled(auth,serverId, enabled)
 
-    @Get("/auto-balance/threshold")
-    override fun getAutoBalanceThreshold(auth: Authentication): Int = service.getAutoBalanceThreshold(auth)
+    @Get("/{serverId}/auto-balance/threshold")
+    override fun getAutoBalanceThreshold(auth: Authentication, @PathVariable serverId: Long): Int = service.getAutoBalanceThreshold(auth,serverId)
 
-    @Put("/auto-balance/threshold")
-    override fun setAutoBalanceThreshold(auth: Authentication, @QueryValue() threshold: Int) = service.setAutoBalanceThreshold(auth, threshold)
+    @Put("/{serverId}/auto-balance/threshold")
+    override fun setAutoBalanceThreshold(auth: Authentication, @PathVariable serverId: Long, @QueryValue() threshold: Int) = service.setAutoBalanceThreshold(auth,serverId, threshold)
 
-    @Get("/idle-time")
-    override fun getKickIdleTime(auth: Authentication): Int = service.getIdleTime(auth)
+    @Get("/{serverId}/idle-time")
+    override fun getKickIdleTime(auth: Authentication, @PathVariable serverId: Long): Int = service.getIdleTime(auth,serverId)
 
-    @Put("/idle-time")
-    override fun setKickIdleTime(auth: Authentication, @QueryValue() minutes: Int) = service.setKickIdleTime(auth, minutes)
+    @Put("/{serverId}/idle-time")
+    override fun setKickIdleTime(auth: Authentication, @PathVariable serverId: Long, @QueryValue() minutes: Int) = service.setKickIdleTime(auth,serverId, minutes)
 
-    @Get("/high-ping")
-    override fun getHighPingThreshold(auth: Authentication): Int = service.getHighPing(auth)
+    @Get("/{serverId}/high-ping")
+    override fun getHighPingThreshold(auth: Authentication, @PathVariable serverId: Long): Int = service.getHighPing(auth,serverId)
 
-    @Put("/high-ping")
-    override fun setHighPingThreshold(auth: Authentication, @QueryValue() millis: Int) = service.setHighPingThreshold(auth, millis)
+    @Put("/{serverId}/high-ping")
+    override fun setHighPingThreshold(auth: Authentication, @PathVariable serverId: Long, @QueryValue() millis: Int) = service.setHighPingThreshold(auth,serverId, millis)
 
-    @Get("/max-queued-players")
-    override fun getMaxQueuedPlayers(auth: Authentication): Int = service.getMaxQueuedPlayers(auth)
+    @Get("/{serverId}/max-queued-players")
+    override fun getMaxQueuedPlayers(auth: Authentication, @PathVariable serverId: Long): Int = service.getMaxQueuedPlayers(auth,serverId)
 
-    @Put("/max-queued-players")
-    override fun setMaxQueuedPlayers(auth: Authentication, @QueryValue() max: Int) = service.setMaxQueuedPlayers(auth, max)
+    @Put("/{serverId}/max-queued-players")
+    override fun setMaxQueuedPlayers(auth: Authentication, @PathVariable serverId: Long, @QueryValue() max: Int) = service.setMaxQueuedPlayers(auth,serverId, max)
 
-    @Get("/vote-kick/enabled")
-    override fun isVoteKickEnabled(auth: Authentication): Boolean = service.isVoteKickEnabled(auth)
+    @Get("/{serverId}/vote-kick/enabled")
+    override fun isVoteKickEnabled(auth: Authentication, @PathVariable serverId: Long): Boolean = service.isVoteKickEnabled(auth,serverId)
 
-    @Put("/vote-kick/enabled")
-    override fun setVoteKickEnabled(auth: Authentication, @QueryValue() enabled: Boolean) = service.setVoteKickEnabled(auth, enabled)
+    @Put("/{serverId}/vote-kick/enabled")
+    override fun setVoteKickEnabled(auth: Authentication, @PathVariable serverId: Long, @QueryValue() enabled: Boolean) = service.setVoteKickEnabled(auth,serverId, enabled)
 
-    @Get("/vote-kick/threshold")
-    override fun getVoteKickThreshold(auth: Authentication): Int = service.getVoteKickThreshold(auth)
+    @Get("/{serverId}/vote-kick/threshold")
+    override fun getVoteKickThreshold(auth: Authentication, @PathVariable serverId: Long): Int = service.getVoteKickThreshold(auth,serverId)
 
-    @Put("/vote-kick/threshold")
-    override fun setVoteKickThreshold(auth: Authentication, @QueryValue() threshold: Int) = service.setVoteKickThreshold(auth, threshold)
+    @Put("/{serverId}/vote-kick/threshold")
+    override fun setVoteKickThreshold(auth: Authentication, @PathVariable serverId: Long, @QueryValue() threshold: Int) = service.setVoteKickThreshold(auth,serverId, threshold)
 
-    @Delete("/vote-kick/threshold")
-    override fun resetVoteKickThreshold(auth: Authentication) = service.resetVoteKickThreshold(auth)
+    @Delete("/{serverId}/vote-kick/threshold")
+    override fun resetVoteKickThreshold(auth: Authentication, @PathVariable serverId: Long) = service.resetVoteKickThreshold(auth,serverId)
 
 }

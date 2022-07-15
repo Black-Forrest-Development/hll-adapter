@@ -16,19 +16,19 @@ class HllServerService(private val actionService: ActionService) {
         private val logger: Logger = LoggerFactory.getLogger(HllServerService::class.java)
     }
 
-    fun getAdminLog(auth: Authentication, minutes: Int, filter: String) = getServerAdminLogAction().get(auth, minutes, filter)
+    fun getAdminLog(auth: Authentication, serverId: Long, minutes: Int, filter: String) = getServerAdminLogAction().get(auth,serverId, minutes, filter)
     private fun getServerAdminLogAction(): ServerAdminLogAction = actionService.get(ServerAdminLogAction.ID) ?: throw InvalidConfigurationException("Cannot find ServerAdminLogAction")
 
-    fun getServerName(auth: Authentication) = getServerNameAction().get(auth)
+    fun getServerName(auth: Authentication, serverId: Long) = getServerNameAction().get(auth,serverId)
     private fun getServerNameAction(): ServerNameAction = actionService.get(ServerNameAction.ID) ?: throw InvalidConfigurationException("Cannot find ServerNameAction")
 
-    fun getServerSlots(auth: Authentication) = getServerSlotsAction().get(auth)
+    fun getServerSlots(auth: Authentication, serverId: Long) = getServerSlotsAction().get(auth,serverId)
     private fun getServerSlotsAction(): ServerSlotsAction = actionService.get(ServerSlotsAction.ID) ?: throw InvalidConfigurationException("Cannot find ServerSlotsAction")
 
-    fun setServerMessage(auth: Authentication, message: Message) = getServerMessageAction().set(auth, message)
+    fun setServerMessage(auth: Authentication, serverId: Long, message: Message) = getServerMessageAction().set(auth,serverId, message)
     private fun getServerMessageAction(): ServerMessageAction = actionService.get(ServerMessageAction.ID) ?: throw InvalidConfigurationException("Cannot find ServerMessageAction")
 
-    fun broadcast(auth: Authentication, message: Message) = getBroadcastAction().broadcast(auth, message)
+    fun broadcast(auth: Authentication, serverId: Long, message: Message) = getBroadcastAction().broadcast(auth,serverId, message)
     private fun getBroadcastAction(): BroadcastAction = actionService.get(BroadcastAction.ID) ?: throw InvalidConfigurationException("Cannot find BroadcastAction")
 
 }

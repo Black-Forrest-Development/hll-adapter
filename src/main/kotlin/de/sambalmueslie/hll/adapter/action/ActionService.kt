@@ -4,13 +4,14 @@ package de.sambalmueslie.hll.adapter.action
 import de.sambalmueslie.hll.adapter.action.api.Action
 import de.sambalmueslie.hll.adapter.rcon.RconClient
 import de.sambalmueslie.hll.adapter.rcon.RconClientConfig
+import de.sambalmueslie.hll.adapter.rcon.RconClientService
 import de.sambalmueslie.hll.adapter.rest.api.ConnectRequest
 import jakarta.inject.Singleton
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 @Singleton
-class ActionService {
+class ActionService(private val clientService: RconClientService) {
 
     companion object {
         private val logger: Logger = LoggerFactory.getLogger(ActionService::class.java)
@@ -25,28 +26,28 @@ class ActionService {
     }
 
     init {
-        register(AutoBalanceAction(client))
-        register(BroadcastAction(client))
-        register(CurrentMapAction(client))
-        register(HighPingAction(client))
-        register(IdleTimeAction(client))
-        register(ManageAdminAction(client))
-        register(ManageProfanityWordsAction(client))
-        register(ManageVipAction(client))
-        register(MapRotationAction(client))
-        register(MaxQueuedPlayersAction(client))
-        register(PermanentBanAction(client))
-        register(PlayerInfoAction(client))
-        register(PlayerKickAction(client))
-        register(PlayerPunishAction(client))
-        register(ServerAdminLogAction(client))
-        register(ServerMapsAction(client))
-        register(ServerNameAction(client))
-        register(ServerPlayerAction(client))
-        register(ServerSlotsAction(client))
-        register(TeamSwitchCoolDownAction(client))
-        register(TemporaryBanAction(client))
-        register(VoteKickAction(client))
+        register(AutoBalanceAction(clientService))
+        register(BroadcastAction(clientService))
+        register(CurrentMapAction(clientService))
+        register(HighPingAction(clientService))
+        register(IdleTimeAction(clientService))
+        register(ManageAdminAction(clientService))
+        register(ManageProfanityWordsAction(clientService))
+        register(ManageVipAction(clientService))
+        register(MapRotationAction(clientService))
+        register(MaxQueuedPlayersAction(clientService))
+        register(PermanentBanAction(clientService))
+        register(PlayerInfoAction(clientService))
+        register(PlayerKickAction(clientService))
+        register(PlayerPunishAction(clientService))
+        register(ServerAdminLogAction(clientService))
+        register(ServerMapsAction(clientService))
+        register(ServerNameAction(clientService))
+        register(ServerPlayerAction(clientService))
+        register(ServerSlotsAction(clientService))
+        register(TeamSwitchCoolDownAction(clientService))
+        register(TemporaryBanAction(clientService))
+        register(VoteKickAction(clientService))
     }
 
     private fun register(action: Action) {

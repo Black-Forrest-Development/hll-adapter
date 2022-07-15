@@ -9,21 +9,21 @@ import io.swagger.v3.oas.annotations.tags.Tag
 @Controller("api/map")
 @Tag(name = "Map API")
 class HllMapController(private val service: HllMapService) : HllMapAPI {
-    @Get("/available")
-    override fun getMaps(auth: Authentication): Set<String> = service.getMaps(auth)
+    @Get("/{serverId}/available")
+    override fun getMaps(auth: Authentication, @PathVariable serverId: Long): Set<String> = service.getMaps(auth,serverId)
 
-    @Get()
-    override fun getCurrentMap(auth: Authentication): String = service.getCurrentMap(auth)
+    @Get("/{serverId}")
+    override fun getCurrentMap(auth: Authentication, @PathVariable serverId: Long): String = service.getCurrentMap(auth,serverId)
 
-    @Post("/{name}")
-    override fun setCurrentMap(auth: Authentication, @PathVariable name: String) = service.setCurrentMap(auth, name)
+    @Post("/{serverId}/{name}")
+    override fun setCurrentMap(auth: Authentication, @PathVariable serverId: Long, @PathVariable name: String) = service.setCurrentMap(auth,serverId, name)
 
-    @Get("/rotation")
-    override fun getMapsInRotation(auth: Authentication): Set<String> = service.getMapsInRotation(auth)
+    @Get("/{serverId}/rotation")
+    override fun getMapsInRotation(auth: Authentication, @PathVariable serverId: Long): Set<String> = service.getMapsInRotation(auth,serverId)
 
-    @Post("/rotation/{name}")
-    override fun addMapToRotation(auth: Authentication, @PathVariable name: String) = service.addMapToRotation(auth, name)
+    @Post("/{serverId}/rotation/{name}")
+    override fun addMapToRotation(auth: Authentication, @PathVariable serverId: Long, @PathVariable name: String) = service.addMapToRotation(auth,serverId, name)
 
-    @Delete("/rotation/{name}")
-    override fun removeMapFromRotation(auth: Authentication, @PathVariable name: String) = service.removeMapFromRotation(auth, name)
+    @Delete("/{serverId}/rotation/{name}")
+    override fun removeMapFromRotation(auth: Authentication, @PathVariable serverId: Long, @PathVariable name: String) = service.removeMapFromRotation(auth,serverId, name)
 }

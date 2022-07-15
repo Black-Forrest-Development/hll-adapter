@@ -1,12 +1,12 @@
 package de.sambalmueslie.hll.adapter.action
 
 
-import de.sambalmueslie.hll.adapter.rcon.api.HllRconClient
+import de.sambalmueslie.hll.adapter.rcon.RconClientService
 import io.micronaut.security.authentication.Authentication
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
-class PlayerSwitchAction(private val client: HllRconClient) : BaseAction(logger) {
+class PlayerSwitchAction(clientService: RconClientService) : BaseAction(clientService, logger) {
 
     companion object {
         private val logger: Logger = LoggerFactory.getLogger(PlayerSwitchAction::class.java)
@@ -15,8 +15,8 @@ class PlayerSwitchAction(private val client: HllRconClient) : BaseAction(logger)
 
     override fun getId() = ID
 
-    fun switchOnDeath(auth: Authentication, player: String)= execute(auth, client,"switchteamondeath $player")
+    fun switchOnDeath(auth: Authentication, serverId: Long, player: String) = execute(auth, serverId, "switchteamondeath $player")
 
-    fun switchImmediately(auth: Authentication, player: String)= execute(auth,client, "switchteamnow $player")
+    fun switchImmediately(auth: Authentication, serverId: Long, player: String) = execute(auth, serverId, "switchteamnow $player")
 
 }
