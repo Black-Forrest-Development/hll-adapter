@@ -17,13 +17,6 @@ abstract class BaseAction(
         // TODO check for authentication
     }
 
-    protected fun <T> execute(auth: Authentication, serverId: Long, command: String, function: (cmd: String) -> T): T {
-        check(auth)
-        val result = function.invoke(command)
-        logger.debug("[${auth.name}] execute - $command => $result")
-        return result
-    }
-
     protected fun getInt(auth: Authentication, serverId: Long, command: String) = execute(auth, serverId, HllRconRequest(command)) { it.getInt() }
     protected fun getBoolean(auth: Authentication, serverId: Long, command: String) = execute(auth, serverId, HllRconRequest(command)) { it.getBoolean() }
     protected fun getString(auth: Authentication, serverId: Long, command: String) = execute(auth, serverId, HllRconRequest(command)) { it.getString() }
@@ -38,7 +31,7 @@ abstract class BaseAction(
 
     protected fun <T> execute(auth: Authentication, serverId: Long, request: HllRconRequest, converter: (response: HllRconResponse) -> T): T {
         check(auth)
-        val client = clientService.getClient(serverId) ?: throw RequestFailedException("Failed to execute ${request.content} cause no client was found for $serverId")
+        val client = clientService.getClient(auth, serverId) ?: throw RequestFailedException("Failed to execute ${request.content} cause no client was found for $serverId")
         val result = client.send(request)
         logger.debug("[${auth.name}] execute - ${request.content} => $result")
         return if (result.success) converter.invoke(result) else throw RequestFailedException("Failed to execute ${request.content} with ${result.content}")

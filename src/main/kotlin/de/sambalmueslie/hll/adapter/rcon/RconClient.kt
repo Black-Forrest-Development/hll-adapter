@@ -16,7 +16,7 @@ import java.util.concurrent.CompletableFuture
 import java.util.concurrent.atomic.AtomicBoolean
 
 
-class RconClient() : HllRconClient {
+class RconClient(internal val config: RconClientConfig) : HllRconClient {
 
     companion object {
         val logger: Logger = LoggerFactory.getLogger(RconClient::class.java)
@@ -27,8 +27,6 @@ class RconClient() : HllRconClient {
     private val isLoggedIn = AtomicBoolean(false)
     internal var key: ByteArray = ByteArray(4)
     private var channel: Channel? = null
-    internal var config: RconClientConfig = RconClientConfig("127.0.0.1", 28316, "")
-
     private var connectionFuture = CompletableFuture<Boolean>()
     private var commandFuture = CompletableFuture<String>()
 
@@ -37,9 +35,7 @@ class RconClient() : HllRconClient {
         .option(ChannelOption.SO_KEEPALIVE, true)
         .handler(RconClientInitializer(this))
 
-    override fun connect(config: RconClientConfig) {
-        if (channel != null) disconnect()
-        this.config = config
+    init {
         connect()
     }
 
@@ -53,14 +49,6 @@ class RconClient() : HllRconClient {
         if (channel == null) return
         channel!!.disconnect().sync()
         channel = null
-    }
-
-    override fun sendCommand(command: String): String {
-        if (!isLoggedIn()) return ""
-        commandFuture = CompletableFuture<String>()
-        logger.trace("Send command: [$command]")
-        channel?.writeAndFlush(command)?.sync()
-        return commandFuture.get()
     }
 
     override fun send(request: HllRconRequest): HllRconResponse {
@@ -90,6 +78,7 @@ class RconClient() : HllRconClient {
         logger.error("Connection failed", cause)
         commandFuture.complete("")
         connectionFuture.complete(false)
+        connect()
     }
 
 
