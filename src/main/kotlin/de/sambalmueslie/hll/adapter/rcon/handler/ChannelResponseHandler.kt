@@ -14,21 +14,18 @@ class ChannelResponseHandler(private val client: RconClient) : SimpleChannelInbo
     }
 
     private val buffer = StringBuilder()
-    private var received: Boolean = false
 
     override fun channelRead0(ctx: ChannelHandlerContext, msg: String) {
         buffer.append(msg)
-        received = true
     }
 
     override fun channelReadComplete(ctx: ChannelHandlerContext?) {
-        if (received) {
-            client.handleResponse(buffer.toString())
-            buffer.clear()
-            received = false
-        }
+        client.handleResponse(buffer.toString())
+        buffer.clear()
         super.channelReadComplete(ctx)
     }
+
+
 
     override fun exceptionCaught(ctx: ChannelHandlerContext, cause: Throwable) {
         client.handleError(cause)

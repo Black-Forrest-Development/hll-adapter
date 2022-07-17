@@ -40,6 +40,7 @@ class RconClient(internal val config: RconClientConfig) : HllRconClient {
     }
 
     private fun connect() {
+        logger.info("Start connection to host ${config.host}")
         connectionFuture = CompletableFuture<Boolean>()
         channel = bootstrap.connect(config.host, config.port).sync().channel()
         connectionFuture.get()
@@ -52,24 +53,38 @@ class RconClient(internal val config: RconClientConfig) : HllRconClient {
     }
 
     override fun send(request: HllRconRequest): HllRconResponse {
+        logger.warn("START SEND '${request.content}'")
         if (!isLoggedIn()) return HllRconResponse(false, "", "Client is not logged in")
         commandFuture = CompletableFuture<String>()
+        logger.info("[${config.host}] - Request '${request.content}'")
         logger.trace("Send command: [${request.content}]")
         channel?.writeAndFlush(request.content)?.sync()
         val result = commandFuture.get()
+        logger.warn("FINISH SEND '${request.content}'")
         return HllRconResponse(true, result, "")
     }
 
 
     fun handleResponse(msg: String) {
-        logger.trace("Got a message: [$msg]")
-        commandFuture.complete(msg)
+        logger.info("[${config.host}] - Response '$msg'")
+        if (!isLoggedIn()) {
+            handleLogin(msg)
+        } else {
+            logger.trace("Got a message: [$msg]")
+            commandFuture.complete(msg)
+        }
     }
 
-    fun handleLogin(success: Boolean) {
-        logger.debug("Login done: [$success]")
-        isLoggedIn.set(success)
-        this.connectionFuture.complete(success)
+    fun handleLogin(msg: String) {
+        if (msg.isBlank()) {
+            val command = "login ${config.password}"
+            channel?.writeAndFlush(command)?.sync()
+        } else {
+            val success = msg == "SUCCESS"
+            logger.debug("Login done: [$success]")
+            isLoggedIn.set(success)
+            this.connectionFuture.complete(success)
+        }
     }
 
     fun isLoggedIn() = isLoggedIn.get()

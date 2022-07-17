@@ -21,8 +21,8 @@ internal class RconClientInitializer(private val client: RconClient) : ChannelIn
         ch.pipeline().addLast("connection", ChannelConnectionHandler(client))
         ch.pipeline().addLast("decoder", ChannelMessageDecoder(client))
         ch.pipeline().addLast("encoder", ChannelMessageEncoder(client))
-        ch.pipeline().addLast("login", ChannelLoginHandler(client))
         ch.pipeline().addLast("response", ChannelResponseHandler(client))
+//        ch.pipeline().addLast("login", ChannelLoginHandler(client))
     }
 
 

@@ -1,6 +1,7 @@
 package de.sambalmueslie.hll.adapter.action
 
 
+import de.sambalmueslie.hll.adapter.action.api.GetActionResponse
 import de.sambalmueslie.hll.adapter.rcon.RconClientService
 import io.micronaut.security.authentication.Authentication
 import org.slf4j.Logger
@@ -15,6 +16,5 @@ class ServerNameAction(clientService: RconClientService) : BaseAction(clientServ
 
     override fun getId() = ID
 
-    fun get(auth: Authentication, serverId: Long) = execute(auth, serverId, "get name")
-
+    fun get(auth: Authentication, serverId: Long) = GetActionResponse(execute(auth, serverId, "get name"))
 }

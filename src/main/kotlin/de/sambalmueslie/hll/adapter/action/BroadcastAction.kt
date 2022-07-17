@@ -1,6 +1,7 @@
 package de.sambalmueslie.hll.adapter.action
 
 
+import de.sambalmueslie.hll.adapter.action.api.ExecuteActionResponse
 import de.sambalmueslie.hll.adapter.rcon.RconClientService
 import de.sambalmueslie.hll.adapter.rcon.builder.HllRconRequestBuilder
 import de.sambalmueslie.hll.adapter.rest.api.Message
@@ -17,6 +18,15 @@ class BroadcastAction(clientService: RconClientService) : BaseAction(clientServi
 
     override fun getId() = ID
 
-    fun broadcast(auth: Authentication, serverId: Long, message: Message) = execute(auth, serverId) { HllRconRequestBuilder("broadcast").escape(message.content).build() }
+    fun broadcast(auth: Authentication, serverId: Long, message: Message): ExecuteActionResponse {
+        val request = HllRconRequestBuilder("broadcast").escape(message.content).build()
+        return try {
+            val result = execute(auth, serverId, request)
+            ExecuteActionResponse(ID, message.content, result == "SUCCESS")
+        } catch (e: Exception) {
+            ExecuteActionResponse(ID, message.content, false)
+        }
+    }
+
 
 }

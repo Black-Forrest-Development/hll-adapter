@@ -33,6 +33,7 @@ class ActionService(clientService: RconClientService) {
         register(PlayerPunishAction(clientService))
         register(ServerAdminLogAction(clientService))
         register(ServerMapsAction(clientService))
+        register(ServerMessageAction(clientService))
         register(ServerNameAction(clientService))
         register(ServerPlayerAction(clientService))
         register(ServerSlotsAction(clientService))

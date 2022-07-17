@@ -1,6 +1,10 @@
 micronaut:
   application:
     name: hllAdapter
+  server:
+    netty:
+      access-logger:
+        enabled: true
   router:
     static-resources:
       swagger:
