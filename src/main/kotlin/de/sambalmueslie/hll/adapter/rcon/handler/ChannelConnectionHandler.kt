@@ -23,4 +23,5 @@ class ChannelConnectionHandler(private val client: RconClient) : ChannelInboundH
         super.channelRead(ctx, msg)
     }
 
+
 }

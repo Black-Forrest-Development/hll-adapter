@@ -4,6 +4,7 @@ plugins {
     id("org.jetbrains.kotlin.plugin.allopen") version "1.6.21"
     id("com.github.johnrengelman.shadow") version "7.1.2"
     id("io.micronaut.application") version "3.4.1"
+    id("org.sonarqube") version "3.4.0.2513"
 }
 
 version = "0.1"
@@ -26,7 +27,6 @@ dependencies {
     implementation("io.micronaut.flyway:micronaut-flyway")
     implementation("io.micronaut.kotlin:micronaut-kotlin-extension-functions")
     implementation("io.micronaut.kotlin:micronaut-kotlin-runtime")
-    implementation("io.micronaut.security:micronaut-security")
     implementation("io.micronaut.sql:micronaut-jdbc-hikari")
     implementation("io.swagger.core.v3:swagger-annotations")
     implementation("jakarta.annotation:jakarta.annotation-api")
@@ -34,10 +34,15 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8:${kotlinVersion}")
     runtimeOnly("ch.qos.logback:logback-classic")
     runtimeOnly("org.postgresql:postgresql")
+    compileOnly("jakarta.persistence:jakarta.persistence-api:3.0.0")
     testImplementation("org.testcontainers:junit-jupiter")
     testImplementation("org.testcontainers:postgresql")
     testImplementation("org.testcontainers:testcontainers")
     compileOnly("org.graalvm.nativeimage:svm")
+
+    implementation("io.micronaut.security:micronaut-security")
+    implementation("io.micronaut.security:micronaut-security-jwt")
+    implementation("io.micronaut.security:micronaut-security-oauth2")
 
     implementation("io.micronaut:micronaut-validation")
 
@@ -75,5 +80,11 @@ micronaut {
     }
 }
 
-
+sonarqube {
+    properties {
+        property("sonar.projectKey", "sambalmueslie_hll-adapter")
+        property("sonar.organization", "sambalmueslie")
+        property("sonar.host.url", "https://sonarcloud.io")
+    }
+}
 

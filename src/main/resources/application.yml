@@ -1,6 +1,10 @@
 micronaut:
   application:
     name: hllAdapter
+  server:
+    netty:
+      access-logger:
+        enabled: true
   router:
     static-resources:
       swagger:
@@ -10,20 +14,48 @@ micronaut:
         paths: classpath:META-INF/swagger/views/swagger-ui
         mapping: /swagger-ui/**
   security:
+    enabled: true
+    endpoints:
+      login:
+        enabled: false
+      oauth:
+        enabled: false
+    token:
+      jwt:
+        enabled: true
+        signatures:
+          jwks:
+            auth0:
+              url: "https://hlltool.eu.auth0.com/.well-known/jwks.json"
     intercept-url-map:
       - access: isAnonymous()
         pattern: /swagger/**
       - access: isAnonymous()
         pattern: /swagger-ui/**
+      - pattern: /**
+        access:
+          - isAuthenticated()
+
 datasources:
   default:
     url: jdbc:postgresql://localhost:5432/postgres
     driverClassName: org.postgresql.Driver
     username: postgres
-    password: ''
-    schema-generate: CREATE_DROP
+    password: postgres
+    schema-generate: NONE
     dialect: POSTGRES
+    schema: hll_adapter
+
 netty:
   default:
     allocator:
       max-order: 3
+
+flyway:
+  datasources:
+    default:
+      enabled: true
+      default-schema: hll_adapter
+      create-schemas: true
+      schemas: hll_adapter
+      clean-schema: false

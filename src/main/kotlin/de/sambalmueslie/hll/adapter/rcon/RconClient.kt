@@ -2,6 +2,8 @@ package de.sambalmueslie.hll.adapter.rcon
 
 
 import de.sambalmueslie.hll.adapter.rcon.api.HllRconClient
+import de.sambalmueslie.hll.adapter.rcon.api.HllRconRequest
+import de.sambalmueslie.hll.adapter.rcon.api.HllRconResponse
 import io.netty.bootstrap.Bootstrap
 import io.netty.channel.Channel
 import io.netty.channel.ChannelOption
@@ -14,7 +16,7 @@ import java.util.concurrent.CompletableFuture
 import java.util.concurrent.atomic.AtomicBoolean
 
 
-class RconClient(val config: RconClientConfig) : HllRconClient {
+class RconClient(internal val config: RconClientConfig) : HllRconClient {
 
     companion object {
         val logger: Logger = LoggerFactory.getLogger(RconClient::class.java)
@@ -24,43 +26,65 @@ class RconClient(val config: RconClientConfig) : HllRconClient {
     internal val isConnected = AtomicBoolean(false)
     private val isLoggedIn = AtomicBoolean(false)
     internal var key: ByteArray = ByteArray(4)
-    private lateinit var channel: Channel
-
+    private var channel: Channel? = null
     private var connectionFuture = CompletableFuture<Boolean>()
     private var commandFuture = CompletableFuture<String>()
+
     private val bootstrap = Bootstrap().group(workerGroup)
         .channel(NioSocketChannel::class.java)
         .option(ChannelOption.SO_KEEPALIVE, true)
         .handler(RconClientInitializer(this))
 
-    override fun connect() {
+    init {
+        connect()
+    }
+
+    private fun connect() {
+        logger.info("Start connection to host ${config.host}")
         connectionFuture = CompletableFuture<Boolean>()
         channel = bootstrap.connect(config.host, config.port).sync().channel()
         connectionFuture.get()
     }
 
     override fun disconnect() {
-        channel.disconnect().sync()
+        if (channel == null) return
+        channel!!.disconnect().sync()
+        channel = null
     }
 
-    override fun sendCommand(command: String): String {
-        if (!isLoggedIn()) return ""
+    override fun send(request: HllRconRequest): HllRconResponse {
+        logger.warn("START SEND '${request.content}'")
+        if (!isLoggedIn()) return HllRconResponse(false, "", "Client is not logged in")
         commandFuture = CompletableFuture<String>()
-        logger.trace("Send command: [$command]")
-        channel.writeAndFlush(command).sync()
-        return commandFuture.get()
+        logger.info("[${config.host}] - Request '${request.content}'")
+        logger.trace("Send command: [${request.content}]")
+        channel?.writeAndFlush(request.content)?.sync()
+        val result = commandFuture.get()
+        logger.warn("FINISH SEND '${request.content}'")
+        return HllRconResponse(true, result, "")
     }
 
 
     fun handleResponse(msg: String) {
-        logger.trace("Got a message: [$msg]")
-        commandFuture.complete(msg)
+        logger.info("[${config.host}] - Response '$msg'")
+        if (!isLoggedIn()) {
+            handleLogin(msg)
+        } else {
+            logger.trace("Got a message: [$msg]")
+            commandFuture.complete(msg)
+        }
     }
 
-    fun handleLogin(success: Boolean) {
-        logger.debug("Login done: [$success]")
-        isLoggedIn.set(success)
-        this.connectionFuture.complete(success)
+    fun handleLogin(msg: String) {
+        if (msg.isBlank()) {
+            val command = "login ${config.password}"
+            channel?.writeAndFlush(command)?.sync()
+        } else {
+            val success = msg == "SUCCESS"
+            logger.debug("Login done: [$success]")
+            isLoggedIn.set(success)
+            this.connectionFuture.complete(success)
+        }
     }
 
     fun isLoggedIn() = isLoggedIn.get()
@@ -69,36 +93,7 @@ class RconClient(val config: RconClientConfig) : HllRconClient {
         logger.error("Connection failed", cause)
         commandFuture.complete("")
         connectionFuture.complete(false)
-
         connect()
-    }
-
-    override fun getBoolean(command: String): Boolean {
-        return sendCommand(command) == "on"
-    }
-
-    override fun setBoolean(command: String, value: Boolean): String {
-        return sendCommand("$command ${if (value) "on" else "off"}")
-    }
-
-    override fun getInt(command: String): Int {
-        return sendCommand(command).toIntOrNull() ?: -1
-    }
-
-    override fun getList(command: String): List<String> {
-        return sendCommand(command).split("\n")
-    }
-
-    override fun getSet(command: String): Set<String> {
-        return sendCommand(command).split("\n").toSet()
-    }
-
-    override fun setInt(command: String, value: Int): String {
-        return sendCommand("$command $value")
-    }
-
-    override fun setList(command: String, words: List<String>): String {
-        return sendCommand("$command ${words.joinToString(",")}")
     }
 
 
