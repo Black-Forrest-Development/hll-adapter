@@ -18,5 +18,7 @@
     <logger name="io.micronaut.security" level="INFO"/>
     <logger name="org.flywaydb" level="INFO"/>
     <logger name="io.micronaut.core.io.service" level="INFO"/>
-    <logger name="de.sambalmueslie" level="DEBUG"/>
+    <logger name="de.sambalmueslie" level="INFO"/>
+    <logger name="de.sambalmueslie.hll.adapter.rcon.handler" level="DEBUG"/>
+    <logger name="io.netty.handler" level="DEBUG"/>
 </configuration>

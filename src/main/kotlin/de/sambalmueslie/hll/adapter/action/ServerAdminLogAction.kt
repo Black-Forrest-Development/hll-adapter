@@ -18,6 +18,7 @@ class ServerAdminLogAction(clientService: RconClientService) : BaseAction(client
 
 
     fun get(auth: Authentication, serverId: Long, minutes: Int, filter: String) = execute(auth, serverId, HllRconRequest("showlog $minutes $filter")) {
+        logger.info("Got ${it.content.length}")
         it.content.split("\n")
     }
 

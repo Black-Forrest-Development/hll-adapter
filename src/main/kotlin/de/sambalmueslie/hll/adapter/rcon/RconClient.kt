@@ -66,7 +66,6 @@ class RconClient(internal val config: RconClientConfig) : HllRconClient {
 
 
     fun handleResponse(msg: String) {
-        logger.info("[${config.host}] - Response '$msg'")
         if (!isLoggedIn()) {
             handleLogin(msg)
         } else {
